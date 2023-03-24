@@ -15,15 +15,16 @@ export default function Users() {
       <h2>Users</h2>
 
       <div className="user-names-container">
-        <Link href="/post/Post" className="user-names">
-          {users.map((user, index) => {
-            return (
-              <>
+        {users.map((user, index) => {
+          return (
+            <>
+              {" "}
+              <Link href="/post/userId" className="user-names">
                 <p key={index}>{user.name}</p>
-              </>
-            );
-          })}
-        </Link>
+              </Link>
+            </>
+          );
+        })}
       </div>
     </>
   );

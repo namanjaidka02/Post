@@ -19,9 +19,9 @@ export default function Form() {
       name: name,
     };
     alert(`your name is ${name}`);
-    const newUsers = [...users, newUser];
-    localStorage.setItem("users", JSON.stringify(newUsers));
-    setUsers(newUsers);
+
+    localStorage.setItem("users", JSON.stringify(users));
+    setUsers([...users, newUser]);
     setName("");
     setEmail("");
   };
