@@ -15,20 +15,23 @@ export default function Form() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const userId = users.length < 1 ? 0 : users[users.length - 1].id + 1;
     const newUser = {
+      id: userId,
       name: name,
+      email: email,
     };
     alert(`your name is ${name}`);
-
-    localStorage.setItem("users", JSON.stringify(users));
-    setUsers([...users, newUser]);
+    const newUsers = [...users, newUser];
+    localStorage.setItem("users", JSON.stringify(newUsers));
+    setUsers(newUsers);
     setName("");
     setEmail("");
   };
 
   const isDisabled = name.trim() === "" || email.trim() === "";
   return (
-    <>
+    <div className="form-container">
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -62,6 +65,6 @@ export default function Form() {
           </Link>
         </h3>
       </form>
-    </>
+    </div>
   );
 }

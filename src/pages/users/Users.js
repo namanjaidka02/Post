@@ -11,21 +11,24 @@ export default function Users() {
   }, []);
 
   return (
-    <>
-      <h2>Users</h2>
+    <div className="users-container">
+      <div className="h2">
+        <h2>Users</h2>
+      </div>
 
       <div className="user-names-container">
         {users.map((user, index) => {
           return (
-            <>
+            <div key={index}>
               {" "}
-              <Link href="/post/userId" className="user-names">
-                <p key={index}>{user.name}</p>
+              <Link href={`/UserId/${user.id}`} className="user-names">
+                <li>{user.name}</li>
+                <p>{user.email}</p>
               </Link>
-            </>
+            </div>
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
