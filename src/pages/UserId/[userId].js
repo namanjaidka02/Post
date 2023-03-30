@@ -6,7 +6,9 @@ function UserId() {
   const userId = router.query.userId;
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-  const [post, updatePost] = useState("");
+  const [postInput, setPostInput] = useState("");
+  const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     const storedUsers = localStorage.getItem("users");
     if (storedUsers) {
@@ -20,26 +22,47 @@ function UserId() {
       return user.id === parseInt(userId);
     });
     if (data) setCurrentUser(data);
-    console.log(data);
+    // console.log(data);
   }, [users]);
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPosts([...posts, postInput]);
+    setPostInput("");
+  };
+
+  const handleDelete = (post) => {
+    setPosts(
+      posts.filter((e) => {
+        return e !== post;
+      })
+    );
+  };
 
   return (
-    <div className="post-container">
+    <div className=" user-post-container">
       <h1 className="user-name">{currentUser?.name}</h1>
-      <input
-        type="text"
-        className="post-input"
-        value={post}
-        onChange={(e) => updatePost(e.target.value)}
-      />
-      <input
-        type="submit"
-        onSubmit={handleSubmit}
-        className="submit-post"
-        value="Create Post"
-      />
+      <form className="add-post" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className="post-input"
+          value={postInput}
+          onChange={(e) => setPostInput(e.target.value)}
+        />
+        <input type="submit" className="submit-post" value="Create Post" />
+      </form>
+      <div className="post-container">
+        {posts.map((post, index) => {
+          return (
+            <div className="posts" key={index}>
+              <p className="p">{post}</p>
+              <button onClick={() => handleDelete(post)} className="rmv-btn">
+                X
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-form {
+.login-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -120,6 +120,7 @@ input {
   font-family: "Courier New", Courier, monospace;
   font-size: 2rem;
   padding-right: 7rem;
+  color: aliceblue;
 }
 
 .user-names-container {
@@ -131,7 +132,7 @@ input {
 
   list-style: none;
   position: relative;
-
+  letter-spacing: 2px;
   color: aqua;
 }
 
@@ -160,7 +161,7 @@ p {
   margin-bottom: 2rem;
 }
 
-.post-container {
+.user-post-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -168,10 +169,11 @@ p {
 }
 
 .user-name {
+  display: flex;
   color: aliceblue;
   font-family: "Courier New", Courier, monospace;
   font-size: 4rem;
-  margin: 5rem 40rem 0 0;
+  margin-top: 4rem;
 }
 
 .post-input {
@@ -188,13 +190,17 @@ p {
 
 .submit-post {
   text-decoration: none;
-  background-color: #0a192f;
+  background-color: transparent;
   padding: 0.3rem;
   font-family: "Courier New", Courier, monospace;
   color: aqua;
   display: flex;
   align-items: center;
-  border: none;
+  border: 3px solid;
+  border-radius: 50px;
+  font-weight: bolder;
+  font-size: 1rem;
+  margin-left: 1rem;
 }
 
 .submit-post:hover {
@@ -203,4 +209,52 @@ p {
   color: black;
   background-color: aqua;
   border-radius: 50px;
+  cursor: pointer;
+}
+
+.add-post {
+  display: flex;
+}
+
+.posts {
+  display: flex;
+  align-items: center;
+  margin: 2rem 2rem 0 2rem;
+}
+
+.p {
+  padding-right: 10px;
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.rmv-btn {
+  height: 35px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px 3px #0a192f;
+  color: aqua;
+  margin-left: 2rem;
+}
+
+.rmv-btn:hover {
+  color: black;
+  background-color: aqua;
+}
+
+@media only screen and (min-width: 390px) and (max-width: 600px) {
+  .post-input {
+    width: 12rem;
+  }
+  .post-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .p {
+    letter-spacing: 1px;
+    word-break: break-all;
+  }
 }

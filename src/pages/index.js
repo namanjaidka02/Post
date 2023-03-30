@@ -32,7 +32,7 @@ export default function Form() {
   const isDisabled = name.trim() === "" || email.trim() === "";
   return (
     <div className="form-container">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="login-form">
         <input
           type="text"
           placeholder="Name"
