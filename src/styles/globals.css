@@ -251,7 +251,7 @@ p {
   }
   .post-container {
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
   }
   .p {
     letter-spacing: 1px;
