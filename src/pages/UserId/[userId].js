@@ -11,12 +11,6 @@ function UserId() {
   //       : null
   //     : null
   // );
-  const [users, setUsers] = useState([]);
-
-  const [currentUser, setCurrentUser] = useState(null);
-  const [postInput, setPostInput] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [userPost, setUserPost] = useState([]);
 
   // useEffect(() => {
   //   const storedUsers = localStorage.getItem("users");
@@ -24,29 +18,45 @@ function UserId() {
   //     setUsers(JSON.parse(storedUsers));
   //     console.log(users);
   //   }
-  // }, []);
+  // }, [router.isReady]);
+  const [users, setUsers] = useState([]);
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [postInput, setPostInput] = useState("");
+  const [allPosts, setAllPosts] = useState(() =>
+    typeof window !== "undefined"
+      ? localStorage.getItem("userPost")
+        ? JSON.parse(localStorage.getItem("userPost"))
+        : []
+      : []
+  );
+  const [userPost, setUserPost] = useState([]);
 
   useEffect(() => {
-    console.log(users);
-    console.log(userId);
+    if (allPosts.length) {
+      const userPost = allPosts.filter((post) => {
+        // console.log(typeof post.userId, typeof userId);
+        // console.log(post.userId === parseInt(userId));
+        return post.userId === parseInt(userId);
+      });
+      console.log(userPost);
+      if (userPost) {
+        setUserPost(userPost);
+      }
+    }
+
+    const storedUsers = localStorage.getItem("users");
+    if (storedUsers) {
+      setUsers(JSON.parse(storedUsers));
+    }
+  }, [router.isReady]);
+
+  useEffect(() => {
     const data = users.find((user) => {
       return user.id === parseInt(userId);
     });
     if (data) setCurrentUser(data);
   }, [users]);
-
-  useEffect(() => {
-    const storedPosts = localStorage.getItem("userPost");
-    if (storedPosts) {
-      setUserPost(JSON.parse(storedPosts));
-    }
-
-    const storedUsers = localStorage.getItem("users");
-
-    if (storedUsers) {
-      setUsers(JSON.parse(storedUsers));
-    }
-  }, [router.isReady]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,11 +65,12 @@ function UserId() {
     const newPost = {
       id: postId,
       post: postInput,
+      userId: parseInt(userId),
     };
+
     setUserPost([...userPost, newPost]);
     localStorage.setItem("userPost", JSON.stringify(userPost));
 
-    setPosts([...posts, postInput]);
     setPostInput("");
   };
 
@@ -72,8 +83,9 @@ function UserId() {
   };
 
   useEffect(() => {
+    console.log(allPosts);
     localStorage.setItem("userPost", JSON.stringify(userPost));
-  }, [userPost]);
+  }, [allPosts]);
 
   return (
     <div className=" user-post-container">
