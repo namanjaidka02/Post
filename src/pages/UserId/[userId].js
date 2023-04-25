@@ -4,89 +4,60 @@ import { useEffect, useState } from "react";
 function UserId() {
   const router = useRouter();
   const userId = router.query.userId;
-  // const [users, setUsers] = useState(() =>
-  //   typeof window !== "undefined"
-  //     ? localStorage.getItem("users")
-  //       ? JSON.parse(localStorage.getItem("users"))
-  //       : null
-  //     : null
-  // );
-
-  // useEffect(() => {
-  //   const storedUsers = localStorage.getItem("users");
-  //   if (storedUsers) {
-  //     setUsers(JSON.parse(storedUsers));
-  //     console.log(users);
-  //   }
-  // }, [router.isReady]);
-  const [users, setUsers] = useState([]);
 
   const [currentUser, setCurrentUser] = useState(null);
   const [postInput, setPostInput] = useState("");
-  const [allPosts, setAllPosts] = useState(() =>
-    typeof window !== "undefined"
-      ? localStorage.getItem("userPost")
-        ? JSON.parse(localStorage.getItem("userPost"))
-        : []
-      : []
-  );
-  const [userPost, setUserPost] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
-    if (allPosts.length) {
-      const userPost = allPosts.filter((post) => {
-        // console.log(typeof post.userId, typeof userId);
-        // console.log(post.userId === parseInt(userId));
-        return post.userId === parseInt(userId);
-      });
-      console.log(userPost);
-      if (userPost) {
-        setUserPost(userPost);
-      }
+    const allPostsData = localStorage.getItem("posts");
+
+    if (allPostsData) {
+      setAllPosts(JSON.parse(allPostsData));
     }
 
     const storedUsers = localStorage.getItem("users");
     if (storedUsers) {
-      setUsers(JSON.parse(storedUsers));
+      const currentUserData = JSON.parse(storedUsers).find((user) => {
+        return user.id === parseInt(userId);
+      });
+      if (currentUserData) setCurrentUser(currentUserData);
     }
   }, [router.isReady]);
 
   useEffect(() => {
-    const data = users.find((user) => {
-      return user.id === parseInt(userId);
+    const userPosts = allPosts.filter((post) => {
+      return post.userId === parseInt(userId);
     });
-    if (data) setCurrentUser(data);
-  }, [users]);
+    if (userPosts) {
+      setUserPosts(userPosts);
+    }
+  }, [allPosts]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const postId =
-      userPost.length < 1 ? 0 : userPost[userPost.length - 1].id + 1;
+      allPosts.length < 1 ? 0 : allPosts[allPosts.length - 1].id + 1;
     const newPost = {
       id: postId,
       post: postInput,
       userId: parseInt(userId),
     };
 
-    setUserPost([...userPost, newPost]);
-    localStorage.setItem("userPost", JSON.stringify(userPost));
-
+    const updatedAllPosts = [...allPosts, newPost];
+    localStorage.setItem("posts", JSON.stringify(updatedAllPosts));
+    setAllPosts(updatedAllPosts);
     setPostInput("");
   };
 
   const handleDelete = (post) => {
-    setUserPost(
-      userPost.filter((e) => {
-        return e !== post;
-      })
-    );
+    const updatedAllPosts = allPosts.filter((e) => {
+      return e !== post;
+    });
+    localStorage.setItem("posts", JSON.stringify(updatedAllPosts));
+    setAllPosts(updatedAllPosts);
   };
-
-  useEffect(() => {
-    console.log(allPosts);
-    localStorage.setItem("userPost", JSON.stringify(userPost));
-  }, [allPosts]);
-
   return (
     <div className=" user-post-container">
       <h1 className="user-name">{currentUser?.name}</h1>
@@ -100,7 +71,7 @@ function UserId() {
         <input type="submit" className="submit-post" value="Create Post" />
       </form>
       <div className="post-container">
-        {userPost.map((post, index) => {
+        {userPosts.map((post, index) => {
           return (
             <div className="posts" key={index}>
               <p className="p">{post.post}</p>
